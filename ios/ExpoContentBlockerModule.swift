@@ -1,9 +1,9 @@
 import ExpoModulesCore
 import SafariServices
 
-public class ContentBlockerModule: Module {
+public class ExpoContentBlockerModule: Module {
   public func definition() -> ModuleDefinition {
-    Name("ContentBlocker")
+    Name("ExpoContentBlocker")
 
     AsyncFunction("applyRules") { (content: String, promise: Promise) in
         DispatchQueue.global(qos: .background).async {
