@@ -141,7 +141,7 @@ const withAdblockXcodeProject: ConfigPlugin<BlockerPluginProps> = (
 
     // Create new PBXGroup for the extension
     const extGroup = xcodeProject.addPbxGroup(
-      [...NSE_EXT_FILES, NSE_SOURCE_FILE],
+      [...NSE_EXT_FILES],
       NSE_TARGET_NAME,
       NSE_TARGET_NAME,
     );
