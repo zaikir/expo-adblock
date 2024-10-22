@@ -5,10 +5,11 @@ public class ContentBlockerModule: Module {
   public func definition() -> ModuleDefinition {
     Name("ContentBlocker")
 
-    AsyncFunction("applyRules") { (rules: String, promise: Promise) in
+    AsyncFunction("applyRules") { (content: String, promise: Promise) in
         DispatchQueue.global(qos: .background).async {
             let fileName = "blockerList.json";
-            let groupName = "group." + Bundle.main.bundleIdentifier! + ".ContentBlocker";
+            let identifier = Bundle.main.bundleIdentifier! + ".ContentBlocker";
+            let groupName = "group." + identifier;
 
             let fileURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupName)!.appendingPathComponent(fileName)
 
@@ -41,6 +42,8 @@ public class ContentBlockerModule: Module {
 
 
     AsyncFunction("getState") { (promise: Promise) in 
+        let identifier = Bundle.main.bundleIdentifier! + ".ContentBlocker";
+
         SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: identifier, completionHandler: { state, error in
             if let error = error {
                 promise.reject(
