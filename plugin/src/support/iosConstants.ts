@@ -16,8 +16,7 @@ export const NSE_BRIDGE_HEADER_SNIPPET = `
 
 export const NSE_TARGET_NAME = "ContentBlocker";
 export const NSE_SOURCE_FILE = "ContentBlockerRequestHandler.swift";
-export const NATIVE_MODULES_FILES = [
-];
+export const NATIVE_MODULES_FILES = [];
 export const NSE_EXT_FILES = [
   "blockerList.json",
   "ContentBlockerRequestHandler.swift",

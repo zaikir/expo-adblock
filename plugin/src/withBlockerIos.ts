@@ -68,9 +68,9 @@ const withAdblockNSE: ConfigPlugin<BlockerPluginProps> = (config) => {
       }
 
       // Copy NSE source file either from configuration-provided location, falling back to the default one.
-      const sourcePath = `${sourceDir}${NSE_SOURCE_FILE}`;
-      const targetFile = `${iosPath}/${NSE_TARGET_NAME}/${NSE_SOURCE_FILE}`;
-      await FileManager.copyFile(`${sourcePath}`, targetFile);
+      // const sourcePath = `${sourceDir}${NSE_SOURCE_FILE}`;
+      // const targetFile = `${iosPath}/${NSE_TARGET_NAME}/${NSE_SOURCE_FILE}`;
+      // await FileManager.copyFile(`${sourcePath}`, targetFile);
 
       /* MODIFY COPIED EXTENSION FILES */
       const nseUpdater = new NseUpdaterManager(iosPath);
@@ -97,7 +97,7 @@ const withCopyNativeModules: ConfigPlugin<BlockerPluginProps> = (config) => {
     async (config) => {
       const iosPath = path.join(config.modRequest.projectRoot, "ios");
 
-      for (let i = 0; i < NATIVE_MODULES_FILES.length; i++) {
+      for (let i = 0; i < NSE_EXT_FILES.length; i++) {
         const extFile = NATIVE_MODULES_FILES[i];
         const targetFile = `${iosPath}/${config.modRequest.projectName}/${extFile}`;
         await FileManager.copyFile(`${sourceDir}${extFile}`, targetFile);
@@ -280,7 +280,7 @@ export const withBlockerIos: ConfigPlugin<BlockerPluginProps> = (
   config = withAppEnvironment(config, props);
   config = withAppGroupPermissions(config, props);
   config = withAdblockNSE(config, props);
-  config = withCopyNativeModules(config, props);
+  // config = withCopyNativeModules(config, props);
   config = withMainTargetXcodeProject(config, props);
   config = withAdblockXcodeProject(config, props);
   config = withEasManagedCredentials(config, props);
