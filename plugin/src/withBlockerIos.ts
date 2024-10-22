@@ -51,7 +51,7 @@ const withEasManagedCredentials: ConfigPlugin<BlockerPluginProps> = (
 
 const withAdblockNSE: ConfigPlugin<BlockerPluginProps> = (config) => {
   const pluginDir = require.resolve("../jest.config.js");
-  const sourceDir = path.join(pluginDir, "../build/serviceExtensionFiles/");
+  const sourceDir = path.join(pluginDir, "../src/serviceExtensionFiles/");
 
   return withDangerousMod(config, [
     "ios",
