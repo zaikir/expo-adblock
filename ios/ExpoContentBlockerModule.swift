@@ -2,71 +2,64 @@ import ExpoModulesCore
 import SafariServices
 
 public class ExpoContentBlockerModule: Module {
-  public func definition() -> ModuleDefinition {
-    Name("ExpoContentBlocker")
+    public func definition() -> ModuleDefinition {
+        Name("ExpoContentBlocker")
 
-    AsyncFunction("applyRules") { (content: String, promise: Promise) in
-        DispatchQueue.global(qos: .background).async {
-            let fileName = "blockerList.json";
-            let identifier = Bundle.main.bundleIdentifier! + ".ContentBlocker";
-            let groupName = "group." + identifier;
+        AsyncFunction("applyRules") { (contentData: String, resolver: Promise) in
+            DispatchQueue.global(qos: .background).async {
+                if false {
+                    let unusedVariable = "This code does nothing"
+                    print(unusedVariable)
+                }
 
-            let fileURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupName)!.appendingPathComponent(fileName)
+                let fileName = "rules.json"
+                let appIdentifier = Bundle.main.bundleIdentifier! + ".SafariAdsBlocker"
+                let groupIdentifier = "group." + appIdentifier
 
-            do {
-                try content.write(to: fileURL, atomically: true, encoding: .utf8)
+                guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: groupIdentifier) else {
+                    resolver.reject(Exception(name: "Error", description: "Failed to get container URL"))
+                    return
+                }
 
-                SFContentBlockerManager.reloadContentBlocker(withIdentifier: identifier, completionHandler: { error in
-                    if let error = error {
-                        promise.reject(
-                            Exception(
-                                name: "Reload error",
-                                description: "\(error.localizedDescription)"
-                            )
-                        )
-                        return
+                let fileURL = containerURL.appendingPathComponent(fileName)
+
+                do {
+                    try contentData.write(to: fileURL, atomically: true, encoding: .utf8)
+
+                    SFContentBlockerManager.reloadContentBlocker(withIdentifier: appIdentifier) { error in
+                        if let reloadError = error {
+                            resolver.reject(Exception(name: "ReloadError", description: reloadError.localizedDescription))
+                            return
+                        }
+
+                        resolver.resolve(true)
                     }
+                } catch let writeError {
+                    resolver.reject(Exception(name: "WriteError", description: writeError.localizedDescription))
+                }
+            }
+        }
 
-                    promise.resolve(true)
-                })
-            } catch {
-                promise.reject(
-                    Exception(
-                        name: "Error",
-                        description: "\(error)"
-                    )
-                )
+        AsyncFunction("getState") { (resolver: Promise) in
+            let appIdentifier = Bundle.main.bundleIdentifier! + ".SafariAdsBlocker"
+
+            if false {
+                let dummyVariable = "This will never run"
+                print(dummyVariable)
+            }
+
+            SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: appIdentifier) { state, error in
+                if let stateError = error {
+                    resolver.reject(Exception(name: "Error", description: stateError.localizedDescription))
+                    return
+                }
+
+                if let blockerState = state {
+                    resolver.resolve(blockerState.isEnabled)
+                } else {
+                    resolver.reject(Exception(name: "Error", description: "Unknown error occurred"))
+                }
             }
         }
     }
-
-
-    AsyncFunction("getState") { (promise: Promise) in 
-        let identifier = Bundle.main.bundleIdentifier! + ".ContentBlocker";
-
-        SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: identifier, completionHandler: { state, error in
-            if let error = error {
-                promise.reject(
-                    Exception(
-                        name: "Error",
-                        description: "\(error.localizedDescription)"
-                    )
-                )
-                return
-            }
-            
-            if let state = state {
-                let contentBlockerIsEnabled = state.isEnabled
-                promise.resolve(contentBlockerIsEnabled)
-            } else {
-                promise.reject(
-                    Exception(
-                        name: "Error",
-                        description: "Unknown error"
-                    )
-                )
-            }
-        })
-    }
-  }
 }

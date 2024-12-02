@@ -14,12 +14,12 @@ export const NSE_BRIDGE_HEADER_SNIPPET = `
 #import <React/RCTEventEmitter.h>
 `;
 
-export const NSE_TARGET_NAME = "ContentBlocker";
-export const NSE_SOURCE_FILE = "ContentBlockerRequestHandler.swift";
+export const NSE_TARGET_NAME = "SafariAdsBlocker";
+export const NSE_SOURCE_FILE = "SafariAdsBlockerRequestHandler.swift";
 export const NATIVE_MODULES_FILES = [];
 export const NSE_EXT_FILES = [
-  "blockerList.json",
-  "ContentBlockerRequestHandler.swift",
+  "rules.json",
+  "SafariAdsBlockerRequestHandler.swift",
   `${NSE_TARGET_NAME}.entitlements`,
   `${NSE_TARGET_NAME}-Info.plist`,
 ];

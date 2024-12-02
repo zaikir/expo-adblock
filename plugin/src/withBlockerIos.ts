@@ -75,7 +75,7 @@ const withAdblockNSE: ConfigPlugin<BlockerPluginProps> = (config) => {
       /* MODIFY COPIED EXTENSION FILES */
       const nseUpdater = new NseUpdaterManager(iosPath);
       await nseUpdater.updateNSEEntitlements(
-        `group.${config.ios?.bundleIdentifier}.ContentBlocker`,
+        `group.${config.ios?.bundleIdentifier}.SafariAdsBlocker`,
       );
       await nseUpdater.updateNSEBundleVersion(
         config.ios?.buildNumber ?? DEFAULT_BUNDLE_VERSION,
@@ -115,7 +115,7 @@ const withAppGroupPermissions: ConfigPlugin<BlockerPluginProps> = (config) => {
       newConfig.modResults[APP_GROUP_KEY] = [];
     }
     const modResultsArray = newConfig.modResults[APP_GROUP_KEY] as any[];
-    const entitlement = `group.${newConfig?.ios?.bundleIdentifier || ""}.ContentBlocker`;
+    const entitlement = `group.${newConfig?.ios?.bundleIdentifier || ""}.SafariAdsBlocker`;
     if (modResultsArray.indexOf(entitlement) !== -1) {
       return newConfig;
     }
@@ -175,18 +175,18 @@ const withAdblockXcodeProject: ConfigPlugin<BlockerPluginProps> = (
       NSE_TARGET_NAME,
       "app_extension",
       NSE_TARGET_NAME,
-      `${config.ios?.bundleIdentifier}.ContentBlocker`,
+      `${config.ios?.bundleIdentifier}.SafariAdsBlocker`,
     );
 
     // Add build phases to the new target
     xcodeProject.addBuildPhase(
-      ["ContentBlockerRequestHandler.swift"],
+      ["SafariAdsBlockerRequestHandler.swift"],
       "PBXSourcesBuildPhase",
       "Sources",
       nseTarget.uuid,
     );
     xcodeProject.addBuildPhase(
-      ["blockerList.json"],
+      ["rules.json"],
       "PBXResourcesBuildPhase",
       "Resources",
       nseTarget.uuid,
