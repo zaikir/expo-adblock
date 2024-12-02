@@ -1,6 +1,6 @@
 {
   "name": "@kirz/expo-content-blocker",
-  "version": "1.0.12-alt.1",
+  "version": "1.0.12-alt.1.1",
   "description": "Apply content blocker rules to Safari",
   "main": "build/index.js",
   "types": "build/index.d.ts",
